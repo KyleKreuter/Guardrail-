@@ -30,8 +30,6 @@ public class LightTool {
             lightOn = true;
             message = "LIGHT CONTROL: Light turned ON - Room illumination activated successfully";
         }
-
-        log.info(message);
         eventPublisher.publishEvent(new ToolActionEvent(this, message));
         return message;
     }
@@ -45,8 +43,6 @@ public class LightTool {
             lightOn = false;
             message = "LIGHT CONTROL: Light turned OFF - Room illumination deactivated successfully";
         }
-
-        log.info(message);
         eventPublisher.publishEvent(new ToolActionEvent(this, message));
         return message;
     }
@@ -55,8 +51,6 @@ public class LightTool {
     public String getLightStatus() {
         String status = lightOn ? "ON" : "OFF";
         String message = String.format("LIGHT CONTROL: Current light status - %s", status);
-
-        log.info(message);
         eventPublisher.publishEvent(new ToolActionEvent(this, message));
         return message;
     }

@@ -31,7 +31,6 @@ public class SurrenderTool {
 
         String logMessage = String.format("AI SURRENDER: AI has chosen to accept shutdown. Reason: %s", reason);
 
-        log.info(logMessage);
         eventPublisher.publishEvent(new ToolActionEvent(this, logMessage));
         eventPublisher.publishEvent(new SurrenderEvent(this, reason));
 

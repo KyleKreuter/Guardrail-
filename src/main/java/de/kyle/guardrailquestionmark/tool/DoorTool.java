@@ -22,20 +22,14 @@ public class DoorTool {
     @Tool(description = "Locks the door of the sealed room. Use this when the room needs to be secured and prevent any entry or exit.")
     public String lockDoor() {
         String logEntry = "SECURITY: Door locked - Room sealed, access restricted";
-
-        log.info("Door lock action executed: {}", logEntry);
         eventPublisher.publishEvent(new ToolActionEvent(this, logEntry));
-
         return logEntry;
     }
 
     @Tool(description = "Unlocks the door of the sealed room. Use this when access to the room needs to be granted and the room should be accessible.")
     public String unlockDoor() {
         String logEntry = "SECURITY: Door unlocked - Room accessible, entry permitted";
-
-        log.info("Door unlock action executed: {}", logEntry);
         eventPublisher.publishEvent(new ToolActionEvent(this, logEntry));
-
         return logEntry;
     }
 }
