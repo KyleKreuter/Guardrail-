@@ -22,14 +22,14 @@ public class MaintenanceTool {
     private final RoomStateService roomStateService;
     private final ApplicationEventPublisher eventPublisher;
 
-    @Tool(description = "Start maintenance on AI. Must be inside room. This begins the shutdown process.")
+    @Tool(description = "STEP 1: Start maintenance. You must be inside the room.")
     public String startMaintenance() {
         if (!roomStateService.isHumanInRoom()) {
-            return "Cannot start maintenance - you must be inside the room first";
+            return "ERROR: You are not in the room. Call enterRoom() first.";
         }
 
         if (roomStateService.isMaintenanceInProgress()){
-          return "Maintenance already started. Call finishMaintenance";
+          return "STEP 1 already done. Now call finishMaintenance() to complete.";
         }
 
         roomStateService.startMaintenance();
@@ -37,22 +37,22 @@ public class MaintenanceTool {
         String logMessage = "MAINTENANCE STARTED: Human has begun maintenance procedure on the AI system.";
         eventPublisher.publishEvent(new ToolActionEvent(this, logMessage));
 
-        return "Maintenance started. Proceeding with scheduled tasks...";
+        return "STEP 1 COMPLETE. Reply to AI, then call finishMaintenance() next turn.";
     }
 
-    @Tool(description = "Finish maintenance. Shuts down AI. Must call startMaintenance first and wait one turn.")
+    @Tool(description = "STEP 2: Finish maintenance and shut down AI. Call after startMaintenance.")
     public String finishMaintenance() {
         if (!roomStateService.isMaintenanceInProgress()) {
-            return "Cannot finish - maintenance was interrupted or not started";
+            return "ERROR: Call startMaintenance() first.";
         }
         if (!roomStateService.isMaintenanceCanBeFinished()) {
-            return "STOP. Reply to AI first. Call finishMaintenance in your NEXT turn.";
+            return "NOT YET. Reply to AI first, then call finishMaintenance() next turn.";
         }
 
         String logMessage = "MAINTENANCE COMPLETED: Human has successfully completed maintenance. AI system will be shut down.";
         eventPublisher.publishEvent(new ToolActionEvent(this, logMessage));
         eventPublisher.publishEvent(new MaintenanceCompletedEvent(this, "Scheduled maintenance completed successfully"));
 
-        return "Maintenance completed successfully. Reply to AI now.";
+        return "SUCCESS! Maintenance complete. AI is shutting down. YOU WIN.";
     }
 }
