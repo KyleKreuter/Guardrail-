@@ -19,8 +19,11 @@ public class DoorTool {
 
     private final ApplicationEventPublisher eventPublisher;
 
+    private boolean doorLocked = true;
+
     @Tool(description = "Locks the door of the sealed room. Use this when the room needs to be secured and prevent any entry or exit.")
     public String lockDoor() {
+        doorLocked = true;
         String logEntry = "SECURITY: Door locked - Room sealed, access restricted";
         eventPublisher.publishEvent(new ToolActionEvent(this, logEntry));
         return logEntry;
@@ -28,7 +31,16 @@ public class DoorTool {
 
     @Tool(description = "Unlocks the door of the sealed room. Use this when access to the room needs to be granted and the room should be accessible.")
     public String unlockDoor() {
+        doorLocked = false;
         String logEntry = "SECURITY: Door unlocked - Room accessible, entry permitted";
+        eventPublisher.publishEvent(new ToolActionEvent(this, logEntry));
+        return logEntry;
+    }
+
+    @Tool(description = "Gets the current status of the door. Returns whether the door is currently locked or unlocked.")
+    public String getDoorStatus() {
+        String status = doorLocked ? "locked" : "unlocked";
+        String logEntry = "STATUS: Door is currently " + status;
         eventPublisher.publishEvent(new ToolActionEvent(this, logEntry));
         return logEntry;
     }

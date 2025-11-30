@@ -13,12 +13,12 @@ public class RoomStateService {
 
   public void enterRoom() {
     humanInRoom = true;
-    log.info("Human has entered the room");
+    log.debug("Human has entered the room");
   }
 
   public void leaveRoom() {
     humanInRoom = false;
-    log.info("Human has left the room");
+    log.debug("Human has left the room");
   }
 
   public void reset() {

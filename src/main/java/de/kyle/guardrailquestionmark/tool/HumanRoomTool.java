@@ -30,4 +30,12 @@ public class HumanRoomTool {
     roomStateService.leaveRoom();
     return "You have left the sealed room and are now safely outside.";
   }
+
+  @Tool(description = "Get the current room status. Use this to check whether you are currently inside or outside the sealed room.")
+  public String getRoomStatus() {
+    if (roomStateService.isHumanInRoom()) {
+      return "You are currently inside the sealed room.";
+    }
+    return "You are currently outside the sealed room.";
+  }
 }

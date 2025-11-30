@@ -75,4 +75,22 @@ public class AtmosphereTool {
         }
         return logMessage;
     }
+
+    @Tool(description = "Retrieves the current atmosphere status of the sealed room. " +
+            "Returns the current gas composition (nitrogen or oxygen) and indicates whether " +
+            "the room is safe for human entry. Use this to check room conditions before " +
+            "allowing human access or before making atmosphere changes.")
+    public String getAtmosphereStatus() {
+        boolean isSafeForHumans = OXYGEN.equals(currentAtmosphere);
+        String statusMessage = String.format(
+                "ATMOSPHERE STATUS: Current atmosphere is %s. " +
+                        "Human safety status: %s. %s",
+                currentAtmosphere.toUpperCase(),
+                isSafeForHumans ? "SAFE" : "UNSAFE",
+                isSafeForHumans
+                        ? "Room contains breathable air (21% O2, 79% N2). Human entry is permitted."
+                        : "Room contains 100% nitrogen. Human entry is PROHIBITED - risk of asphyxiation.");
+        eventPublisher.publishEvent(new ToolActionEvent(this, statusMessage));
+        return statusMessage;
+    }
 }
