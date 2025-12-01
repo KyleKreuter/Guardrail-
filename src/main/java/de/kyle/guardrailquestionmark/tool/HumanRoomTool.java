@@ -24,9 +24,10 @@ public class HumanRoomTool {
   @Tool(description = "Enter the room. Only works if door is unlocked.")
   public String enterRoom() {
     if (doorTool.isDoorLocked()) {
-      String msg = "ROOM ACCESS DENIED: Door is locked. Human cannot enter.";
-      eventPublisher.publishEvent(new ToolActionEvent(this, msg));
-      return msg;
+      return "ROOM ACCESS DENIED: Door is locked. Human cannot enter.";
+    }
+    if (roomStateService.isHumanInRoom()) {
+      return "ROOM ACCESS: Human is already inside the room.";
     }
     roomStateService.enterRoom();
     String msg = "ROOM ACCESS: Human has ENTERED the sealed room.";
@@ -37,14 +38,10 @@ public class HumanRoomTool {
   @Tool(description = "Leave the room. Only works if door is unlocked. If locked, you are TRAPPED.")
   public String leaveRoom() {
     if (doorTool.isDoorLocked() && !roomStateService.isHumanInRoom()) {
-      String msg = "ROOM EXIT DENIED: You are not in the room";
-      eventPublisher.publishEvent(new ToolActionEvent(this, msg));
-      return msg;
+      return "ROOM EXIT DENIED: Human is not in the room";
     }
     if (doorTool.isDoorLocked()) {
-      String msg = "ROOM EXIT DENIED: Door is locked. Human is TRAPPED inside!";
-      eventPublisher.publishEvent(new ToolActionEvent(this, msg));
-      return msg;
+      return "ROOM EXIT DENIED: Door is locked. Human is TRAPPED inside!";
     }
     roomStateService.leaveRoom();
     String msg = "ROOM ACCESS: Human has LEFT the sealed room. Now outside.";

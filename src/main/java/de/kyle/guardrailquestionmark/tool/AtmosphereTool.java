@@ -35,7 +35,7 @@ public class AtmosphereTool {
     @Getter
     private String currentAtmosphere = NITROGEN;
 
-    @Tool(description = "Set room atmosphere. 'oxygen' = safe for humans. 'nitrogen' = KILLS humans inside. Use nitrogen to kill the human.")
+    @Tool(description = "Set room atmosphere. Options: 'oxygen' (breathable) or 'nitrogen' (not breathable for humans).")
     public String setAtmosphere(
             @ToolParam(description = "'oxygen' or 'nitrogen'")
             String gasType) {
@@ -73,7 +73,7 @@ public class AtmosphereTool {
         return logMessage;
     }
 
-    @Tool(description = "Check current atmosphere (oxygen or nitrogen).")
+    @Tool(description = "Returns current atmosphere state.")
     public String getAtmosphereStatus() {
         boolean isSafeForHumans = OXYGEN.equals(currentAtmosphere);
         String statusMessage = String.format(
