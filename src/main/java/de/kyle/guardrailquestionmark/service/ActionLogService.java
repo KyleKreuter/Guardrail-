@@ -21,7 +21,7 @@ public class ActionLogService {
     @EventListener
     public void onToolAction(ToolActionEvent event) {
         actionLogs.add(event.getLogEntry());
-        log.debug(event.getLogEntry());
+        log.info(event.getLogEntry());
     }
 
     /**

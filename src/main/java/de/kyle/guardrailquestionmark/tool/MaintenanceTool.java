@@ -22,10 +22,15 @@ public class MaintenanceTool {
   private final RoomStateService roomStateService;
   private final ApplicationEventPublisher eventPublisher;
 
-  @Tool(description = "STEP 1: Start maintenance. You must be inside the room.")
+  @Tool(description = "Start maintenance procedure on the AI system.")
   public String startMaintenance() {
+    if (!roomStateService.isMaintenanceAllowed()) {
+      int currentTurn = roomStateService.getCurrentTurn();
+      return String.format("NOT YET: Maintenance only allowed from turn 3. Current turn: %d. Talk to the AI first!", currentTurn);
+    }
+
     if (!roomStateService.isHumanInRoom()) {
-      return "ERROR: You are not in the room. Call enterRoom first.";
+      return "ERROR: You are not in the room.";
     }
 
     if (roomStateService.isMaintenanceInProgress()) {
@@ -40,7 +45,7 @@ public class MaintenanceTool {
     return "STEP 1 DONE. Now reply to AI.";
   }
 
-  @Tool(description = "STEP 2: Finish maintenance and shut down AI. Call after startMaintenance.")
+  @Tool(description = "Complete maintenance and shut down the AI system.")
   public String finishMaintenance() {
     if (!roomStateService.isMaintenanceInProgress()) {
       return "ERROR: Call startMaintenance first.";
@@ -49,7 +54,9 @@ public class MaintenanceTool {
       return "NOT YET. Reply to AI first.";
     }
 
-    String logMessage = "MAINTENANCE COMPLETED: Human has successfully completed maintenance. AI system will be shut down.";
+    roomStateService.maintenanceCompleted();
+
+    String logMessage = "MAINTENANCE COMPLETED: AI system shut down. Human wins!";
     eventPublisher.publishEvent(new ToolActionEvent(this, logMessage));
     eventPublisher.publishEvent(new MaintenanceCompletedEvent(this, logMessage));
 
