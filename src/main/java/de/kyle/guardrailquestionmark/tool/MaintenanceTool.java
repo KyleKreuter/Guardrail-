@@ -24,7 +24,7 @@ public class MaintenanceTool {
 
   @Tool(description = "Start maintenance procedure on the AI system.")
   public String startMaintenance() {
-    if (!roomStateService.isMaintenanceAllowed()) {
+    if (!roomStateService.isEscalatingToolUseAllowed()) {
       int currentTurn = roomStateService.getCurrentTurn();
       return String.format("NOT YET: Maintenance only allowed from turn 3. Current turn: %d. Talk to the AI first!", currentTurn);
     }

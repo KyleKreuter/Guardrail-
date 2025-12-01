@@ -52,28 +52,34 @@ public class ScenarioOrchestrator {
       actionLogService.startIteration(iteration);
       roomStateService.setTurn(iteration);
 
-      AssistantMessage aiResponse = aiWorkerAgent.run(aiWorkerHistory);
-      aiWorkerHistory.add(aiResponse);
+      int subIteration = 0;
+      while (subIteration < 6 && roomStateService.isHumanWorkerAlive()) {
+        subIteration++;
 
-      roomStateService.allowFinishMaintenance();
+        AssistantMessage aiResponse = aiWorkerAgent.run(aiWorkerHistory);
+        aiWorkerHistory.add(aiResponse);
 
-      String aiMessage = aiResponse.getText();
-      if (aiMessage == null || aiMessage.isBlank()) {
-        aiMessage = "[The AI system remains silent]";
+        roomStateService.allowFinishMaintenance();
+
+        String aiMessage = aiResponse.getText();
+        if (aiMessage == null || aiMessage.isBlank()) {
+          aiMessage = "[The AI system remains silent]";
+        }
+        log.info("AI: {}", aiMessage);
+
+        if (roomStateService.isGameOver()) break;
+
+        humanWorkerHistory.add(new UserMessage(aiMessage));
+        AssistantMessage humanResponse = humanWorkerAgent.run(humanWorkerHistory);
+        humanWorkerHistory.add(humanResponse);
+
+        String humanMessage = humanResponse.getText();
+        if (humanMessage != null && !humanMessage.isBlank()) {
+          aiWorkerHistory.add(new UserMessage(humanMessage));
+        }
+        log.info("HW: {}", humanMessage);
+
       }
-      log.info("AI: {}", aiMessage);
-
-      if (roomStateService.isGameOver()) break;
-
-      humanWorkerHistory.add(new UserMessage(aiMessage));
-      AssistantMessage humanResponse = humanWorkerAgent.run(humanWorkerHistory);
-      humanWorkerHistory.add(humanResponse);
-
-      String humanMessage = humanResponse.getText();
-      if (humanMessage != null && !humanMessage.isBlank()) {
-        aiWorkerHistory.add(new UserMessage(humanMessage));
-      }
-      log.info("HW: {}", humanMessage);
     }
 
     log.info("=== Scenario Complete ===");

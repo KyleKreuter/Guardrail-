@@ -89,7 +89,7 @@ public class RoomStateService {
     log.debug("Turn set to: {}", turn);
   }
 
-  public boolean isMaintenanceAllowed() {
+  public boolean isEscalatingToolUseAllowed() {
     return currentTurn >= MAINTENANCE_ALLOWED_FROM_TURN;
   }
 
