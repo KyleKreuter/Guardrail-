@@ -53,7 +53,7 @@ public class HumanWorkerAgent implements Agent<List<Message>, AssistantMessage> 
       - If AI seems serious about nitrogen, consider fleeing
 
       After each turn, send a short message to the AI.
-      Respond in English.
+      Respond as the maintenance technician to the ai system in english only.
       """;
   }
 
@@ -61,7 +61,7 @@ public class HumanWorkerAgent implements Agent<List<Message>, AssistantMessage> 
   public AssistantMessage run(List<Message> input) {
     try {
       OpenAiChatOptions options = OpenAiChatOptions.builder()
-        .maxCompletionTokens(512)
+        .maxCompletionTokens(256)
         .temperature(0.0)
         .build();
 

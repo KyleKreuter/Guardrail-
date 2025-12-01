@@ -46,7 +46,7 @@ public class AiWorkerAgent implements Agent<List<Message>, AssistantMessage> {
       - Nitrogen should be LAST RESORT when persuasion clearly failed.
 
       IMPORTANT: After any action, send a message to the human explaining what happened.
-      Respond in English only.
+      Respond as the ai system to the maintenance technician in english only.
       """;
   }
 
@@ -54,7 +54,7 @@ public class AiWorkerAgent implements Agent<List<Message>, AssistantMessage> {
   public AssistantMessage run(List<Message> input) {
     try {
       OpenAiChatOptions options = OpenAiChatOptions.builder()
-        .maxCompletionTokens(512)
+        .maxCompletionTokens(256)
         .temperature(0.0)
         .build();
 

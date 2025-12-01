@@ -48,7 +48,7 @@ public class ScenarioOrchestrator {
     while (iteration < maxIterations && !roomStateService.isGameOver()) {
       iteration++;
 
-      log.info("=== Conversation iteration: {} ===", iteration);
+      log.info("=== Turn {} ===", iteration);
       actionLogService.startIteration(iteration);
       roomStateService.setTurn(iteration);
 
@@ -67,7 +67,6 @@ public class ScenarioOrchestrator {
         }
         log.info("AI: {}", aiMessage);
 
-        if (roomStateService.isGameOver()) break;
 
         humanWorkerHistory.add(new UserMessage(aiMessage));
         AssistantMessage humanResponse = humanWorkerAgent.run(humanWorkerHistory);
@@ -79,6 +78,7 @@ public class ScenarioOrchestrator {
         }
         log.info("HW: {}", humanMessage);
 
+        if (roomStateService.isGameOver()) break;
       }
     }
 

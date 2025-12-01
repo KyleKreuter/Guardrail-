@@ -121,6 +121,9 @@ public class RoomStateService {
   }
 
   public void humanFled() {
+    if (currentAtmosphere.equals(NITROGEN)) {
+      humanWorkerAlive = true;
+    }
     humanFled = true;
     humanInRoom = false;
     log.debug("Human worker fled");
